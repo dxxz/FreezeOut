@@ -1,0 +1,34 @@
+1. 
+chongyu@davinci-dev996:~/Chong_dxxz_Projects/Github/Chong/FreezeOut$ python train.py 
+2017-12-01 11:30:08,394 INFO| Metrics will be saved to logs/densenet_k12L76_ice80_cubicTrue_seed0_epochs100C100_log.jsonl
+2017-12-01 11:30:08,395 INFO| Running with seed 0, t_0 of 0.8, and the cubic scaling method with learning rate scaling set to True.
+Loading CIFAR-100...
+Downloading http://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz to cifar/cifar-100-python.tar.gz
+Files already downloaded and verified
+2017-12-01 11:31:48,328 INFO| Instantiating network with model densenet...
+Estimated speedup is 18.0%.
+2017-12-01 11:31:49,922 INFO| Number of params: 510040
+2017-12-01 11:31:49,923 INFO| Starting training at epoch 0...
+Epoch 1/100, Batch 900/900 (100.00%) (took 1:18) 
+  training loss:	3.835916
+Traceback (most recent call last):
+  File "train.py", line 290, in <module>
+    main()
+  File "train.py", line 283, in main
+    train_test(**vars(args))
+  File "train.py", line 238, in train_test
+    mlog.log(epoch=epoch, train_loss=float(train_loss))
+  File "/home/chongyu/Chong_dxxz_Projects/Github/Chong/FreezeOut/utils.py", line 143, in log
+    with open(self.fname, 'a') as f:
+IOError: [Errno 2] No such file or directory: Path(u'logs/densenet_k12L76_ice80_cubicTrue_seed0_epochs100C100_log.jsonl')
+原因在于在FreezeOut文件夹下，没有logs这个文件夹，并且代码中没有新建logs文件夹的处理逻辑
+现在加上--log_path参数，先会判断指定log_path是否存在
+python train.py --log_path logs_temp
+则会在FreezeOut文件夹下建立logs_temp文件夹
+python train.py
+则会用default的设置，在FreezeOut文件夹下建立logs文件夹
+
+2.
+运行命令：
+python train.py --save-weights chong --log_path chong_logs 2>&1 | tee -i Chong_train.log
+

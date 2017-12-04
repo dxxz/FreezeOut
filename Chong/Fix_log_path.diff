@@ -1,0 +1,45 @@
+diff --git a/train.py b/train.py
+index 904f4e9..e28af4b 100644
+--- a/train.py
++++ b/train.py
+@@ -102,6 +102,8 @@ def opts_parser():
+     parser.add_argument(
+         '--save-weights', type=str, default='default_save', metavar='FILE',
+         help='Save network weights to given .pth file')
++    parser.add_argument('--log_path', type=str, default='logs', metavar='PATH',
++        help='Path to save log file')
+     return parser
+ 
+ 
+@@ -111,7 +113,7 @@ def opts_parser():
+ def train_test(depth, growth_rate, dropout, augment,
+                validate, epochs, save_weights, batch_size, 
+                t_0, seed, scale_lr, how_scale, which_dataset, 
+-               const_time, resume, model):
++               const_time, resume, model, log_path):
+     
+     # Update save_weights:
+     if save_weights=='default_save':
+@@ -123,9 +125,20 @@ def train_test(depth, growth_rate, dropout, augment,
+     torch.manual_seed(seed)
+     torch.cuda.manual_seed(seed)
+     np.random.seed(seed)
+-    
++
++    print "------------------------------------------------------------------------------------------------------------"
++    current_path = os.getcwd()
++    print "The current path containing this python file is: " + current_path
++
++    if os.path.exists(log_path):
++        print "The path to save log file exists."
++    else:
++        print "The path to save log file doesn't exist! I will create it now!"
++        os.makedirs(log_path)
++    print "------------------------------------------------------------------------------------------------------------"
++
+     # Name of the file to which we're saving losses and errors.
+-    metrics_fname = 'logs/'+save_weights + '_log.jsonl'
++    metrics_fname = log_path + os.sep + save_weights + '_log.jsonl'
+     logging.basicConfig(level=logging.INFO,
+                         format='%(asctime)s %(levelname)s| %(message)s')
+     logging.info('Metrics will be saved to {}'.format(metrics_fname))
